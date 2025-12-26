@@ -1,0 +1,25 @@
+# Code Owners
+# This file defines ownership of code in the repository.
+# Each line is a file pattern followed by one or more owners.
+# Owners are automatically requested for review when someone opens a PR.
+
+# Default owner for all files
+* @cristianmagana
+
+# Root package
+/src/ @cristianmagana
+/package.json @cristianmagana
+/tsconfig*.json @cristianmagana
+
+# AWS package
+/packages/aws/ @cristianmagana
+
+# CodeArtifact package
+/packages/codeartifact/ @cristianmagana
+
+# Configuration files
+/.eslintrc.json @cristianmagana
+/.prettierrc.js @cristianmagana
+/.gitignore @cristianmagana
+/.vscode/ @cristianmagana
+
