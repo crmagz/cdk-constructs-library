@@ -1,0 +1,27 @@
+{
+    "ignorePatterns": ["build", "node_modules", "cdk.out"],
+    "extends": ["./node_modules/gts/"],
+    "env": {
+        "jest": true
+    },
+    "plugins": ["import"],
+    "rules": {
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "packageDir": [
+                    "./",
+                    "./packages/aws",
+                    "./packages/codeartifact",
+                    "./packages/api-gateway",
+                    "./packages/aurora",
+                    "./packages/cloudwatch",
+                    "./packages/eks",
+                    "./packages/waf"
+                ]
+            }
+        ],
+        "n/no-extraneous-import": "off",
+        "n/no-extraneous-require": "off"
+    }
+}

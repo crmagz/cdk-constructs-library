@@ -1,0 +1,7 @@
+# Example .npmrc configuration
+# Copy this file to .npmrc and configure for your package registry
+
+# For private npm registry (if needed)
+# @cdk-constructs:registry=https://your-registry.com/npm/
+# //your-registry.com/npm/:_authToken=${NPM_AUTH_TOKEN}
+

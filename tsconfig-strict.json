@@ -1,0 +1,19 @@
+{
+    "extends": "./node_modules/gts/tsconfig-google.json",
+    "compilerOptions": {
+        "esModuleInterop": true,
+        "incremental": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "target": "es2022",
+        "sourceMap": true,
+        "inlineSources": true
+    }
+}
