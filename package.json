@@ -16,14 +16,19 @@
     ],
     "scripts": {
         "clean": "rm -rf dist packages/*/dist && tsc --build --clean",
-        "lint": "eslint 'src/**/*.ts' 'packages/*/src/**/*.ts' --max-warnings=0",
-        "lint:fix": "eslint 'src/**/*.ts' 'packages/*/src/**/*.ts' --fix",
+        "lint": "eslint 'src/**/*.ts' 'packages/*/src/**/*.ts' 'bin/**/*.ts' 'lib/**/*.ts' --max-warnings=0",
+        "lint:fix": "eslint 'src/**/*.ts' 'packages/*/src/**/*.ts' 'bin/**/*.ts' 'lib/**/*.ts' --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "format:fix": "npm run format && npm run lint:fix",
         "build": "rm -rf dist && tsc -p tsconfig.json",
-        "build:workspaces": "npm run build && cp -r dist node_modules/@cdk-constructs/cdk/ && tsc --build tsconfig.build.json",
-        "prepare": "npm run build",
+        "build:app": "tsc -p tsconfig.app.json",
+        "build:workspaces": "npm run build && cp -r dist node_modules/@cdk-constructs/cdk/ && tsc --build tsconfig.build.json && npm run build:app",
+        "test": "echo \"No tests yet\" && exit 0",
+        "synth": "cdk synth",
+        "diff": "cdk diff",
+        "deploy": "cdk deploy",
+        "prepare": "husky",
         "postinstall": "rm -rf node_modules/@cdk-constructs/*/node_modules"
     },
     "devDependencies": {
@@ -38,7 +43,9 @@
         "eslint-plugin-n": "^17.17.0",
         "eslint-plugin-prettier": "^5.0.0",
         "gts": "^5.3.1",
+        "husky": "^9.0.0",
         "jest": "^29.7.0",
+        "lint-staged": "^15.0.0",
         "prettier": "^3.0.0",
         "ts-deepmerge": "^7.0.2",
         "ts-jest": "^29.1.2",
@@ -46,6 +53,8 @@
         "typescript": "~5.4.3"
     },
     "dependencies": {
+        "@cdk-constructs/aws": "*",
+        "@cdk-constructs/codeartifact": "*",
         "source-map-support": "^0.5.21"
     },
     "peerDependencies": {
@@ -58,5 +67,13 @@
     "nodeAndNpmVersions": {
         "npmVersion": "10",
         "nodeVersion": "24"
+    },
+    "lint-staged": {
+        "*.{ts,js,json,md}": [
+            "prettier --write"
+        ],
+        "*.{ts,js}": [
+            "eslint --fix"
+        ]
     }
 }

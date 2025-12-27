@@ -45,9 +45,18 @@ Thumbs.db
 *.tmp
 *.temp
 
-# Root markdown files (except README.md)
+# Root markdown files (except README.md and important config files)
 /*.md
 !/README.md
+!/.code-instructions.md
+
+# AI configuration (keep .ai folder and rules files)
+.claude/skills/.ai-link
+.cursor/rules/.ai-link
+!.cursorrules
+
+# Husky (keep .husky directory but ignore generated files)
+.husky/_
 
 # All dist directories
 **/dist/

@@ -1,13 +1,4 @@
 {
     "files": [],
-    "references": [
-        {"path": "."},
-        {"path": "./packages/aws"},
-        {"path": "./packages/codeartifact"},
-        {"path": "./packages/api-gateway"},
-        {"path": "./packages/aurora"},
-        {"path": "./packages/cloudwatch"},
-        {"path": "./packages/eks"},
-        {"path": "./packages/waf"}
-    ]
+    "references": [{"path": "."}, {"path": "./packages/aws"}, {"path": "./packages/codeartifact"}]
 }
