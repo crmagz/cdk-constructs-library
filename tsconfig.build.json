@@ -6,6 +6,7 @@
         {"path": "./packages/aurora"},
         {"path": "./packages/codeartifact"},
         {"path": "./packages/cloudfront"},
-        {"path": "./packages/route53"}
+        {"path": "./packages/route53"},
+        {"path": "./packages/waf"}
     ]
 }

@@ -35,6 +35,7 @@ This monorepo contains the following packages:
 | [@cdk-constructs/codeartifact](packages/codeartifact) | 0.1.0   | ^2.225.0    | >=24         | CodeArtifact domain and repository constructs                    |
 | [@cdk-constructs/route53](packages/route53)           | 0.1.0   | ^2.225.0    | >=24         | Route53 DNS, hosted zones, resolvers, and ACM certificates       |
 | [@cdk-constructs/s3](packages/s3)                     | 0.1.0   | ^2.225.0    | >=24         | S3 bucket constructs with lifecycle policies and storage classes |
+| [@cdk-constructs/waf](packages/waf)                   | 0.1.0   | ^2.225.0    | >=24         | WAF WebACL constructs with geo-blocking and managed rules        |
 
 ### Dependency Resolution
 
@@ -45,7 +46,8 @@ This monorepo contains the following packages:
 ├── @cdk-constructs/cloudfront (depends on: s3@*)
 ├── @cdk-constructs/codeartifact (depends on: aws@*)
 ├── @cdk-constructs/route53
-└── @cdk-constructs/s3
+├── @cdk-constructs/s3
+└── @cdk-constructs/waf
 ```
 
 ### Root Package Constructs
@@ -78,6 +80,7 @@ npm install @cdk-constructs/cloudfront --save-exact
 npm install @cdk-constructs/codeartifact --save-exact
 npm install @cdk-constructs/route53 --save-exact
 npm install @cdk-constructs/s3 --save-exact
+npm install @cdk-constructs/waf --save-exact
 ```
 
 ## Development
@@ -123,6 +126,7 @@ make build-workspace PACKAGE=cloudfront    # Build @cdk-constructs/cloudfront
 make build-workspace PACKAGE=codeartifact  # Build @cdk-constructs/codeartifact
 make build-workspace PACKAGE=route53       # Build @cdk-constructs/route53
 make build-workspace PACKAGE=s3            # Build @cdk-constructs/s3
+make build-workspace PACKAGE=waf           # Build @cdk-constructs/waf
 
 # Or use individual targets
 make build-aws            # Build @cdk-constructs/aws
@@ -131,6 +135,7 @@ make build-cloudfront     # Build @cdk-constructs/cloudfront
 make build-codeartifact   # Build @cdk-constructs/codeartifact
 make build-route53        # Build @cdk-constructs/route53
 make build-s3             # Build @cdk-constructs/s3
+make build-waf            # Build @cdk-constructs/waf
 ```
 
 #### Code Quality
@@ -179,6 +184,7 @@ make publish-cloudfront   # Publish @cdk-constructs/cloudfront
 make publish-codeartifact # Publish @cdk-constructs/codeartifact
 make publish-route53      # Publish @cdk-constructs/route53
 make publish-s3           # Publish @cdk-constructs/s3
+make publish-waf          # Publish @cdk-constructs/waf
 
 # Or publish specific workspace
 make publish-workspace PACKAGE=aws
@@ -186,6 +192,7 @@ make publish-workspace PACKAGE=aurora
 make publish-workspace PACKAGE=cloudfront
 make publish-workspace PACKAGE=route53
 make publish-workspace PACKAGE=s3
+make publish-workspace PACKAGE=waf
 
 # Just authenticate with CodeArtifact
 make codeartifact-login
@@ -246,12 +253,14 @@ cdk-constructs-library/
 │   ├── cloudfront/          # CloudFront distribution with S3 origin constructs
 │   ├── codeartifact/        # CodeArtifact domain and repository constructs
 │   ├── route53/             # Route53 DNS, hosted zones, resolvers, and ACM certificates
-│   └── s3/                  # S3 bucket constructs with lifecycle policies
+│   ├── s3/                  # S3 bucket constructs with lifecycle policies
+│   └── waf/                 # WAF WebACL constructs with geo-blocking and managed rules
 ├── examples/
 │   ├── aurora/              # Aurora example stacks and configurations
 │   ├── cloudfront/          # CloudFront example stacks and configurations
 │   ├── route53/             # Route53 example stacks and configurations
-│   └── s3/                  # S3 example stacks and configurations
+│   ├── s3/                  # S3 example stacks and configurations
+│   └── waf/                 # WAF example stacks and configurations
 ├── src/                     # Root package source
 ├── bin/                     # CDK app entry points
 ├── lib/                     # CDK app stacks

@@ -1,0 +1,42 @@
+{
+    "name": "@cdk-constructs/waf",
+    "version": "0.1.1",
+    "license": "Apache-2.0",
+    "description": "AWS WAF WebACL constructs with geo-blocking, managed rules, and custom path rules for CDK Constructs Library",
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
+    "keywords": [
+        "aws-cdk",
+        "waf",
+        "wafv2",
+        "web-application-firewall",
+        "security",
+        "geo-blocking",
+        "ddos-protection"
+    ],
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "rm -rf dist && tsc -p tsconfig.json",
+        "build:noClean": "tsc -p tsconfig.json",
+        "test": "jest",
+        "synth": "npx cdk synth",
+        "clean": "rm -rf dist && tsc --build --clean",
+        "format": "prettier --write ."
+    },
+    "dependencies": {},
+    "peerDependencies": {
+        "aws-cdk-lib": "^2.225.0",
+        "constructs": "^10.0.0"
+    },
+    "devDependencies": {
+        "aws-cdk-lib": "2.225.0",
+        "constructs": "10.4.2",
+        "jest": "^29.7.0",
+        "typescript": "~5.4.3"
+    },
+    "engines": {
+        "node": ">=24"
+    }
+}
