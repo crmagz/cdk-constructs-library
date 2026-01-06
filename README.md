@@ -27,15 +27,15 @@ This monorepo contains the following packages:
 
 ### Subpackages Compatibility Matrix
 
-| Package                                               | Version | CDK Version | Node Version | Description                                                      |
-| ----------------------------------------------------- | ------- | ----------- | ------------ | ---------------------------------------------------------------- |
-| [@cdk-constructs/aws](packages/aws)                   | 0.1.0   | ^2.225.0    | >=24         | AWS account, region, and environment enums                       |
-| [@cdk-constructs/aurora](packages/aurora)             | 0.1.0   | ^2.225.0    | >=24         | Aurora MySQL and PostgreSQL database constructs                  |
-| [@cdk-constructs/cloudfront](packages/cloudfront)     | 0.1.0   | ^2.225.0    | >=24         | CloudFront distribution with S3 origin constructs                |
-| [@cdk-constructs/codeartifact](packages/codeartifact) | 0.1.0   | ^2.225.0    | >=24         | CodeArtifact domain and repository constructs                    |
-| [@cdk-constructs/route53](packages/route53)           | 0.1.0   | ^2.225.0    | >=24         | Route53 DNS, hosted zones, resolvers, and ACM certificates       |
-| [@cdk-constructs/s3](packages/s3)                     | 0.1.0   | ^2.225.0    | >=24         | S3 bucket constructs with lifecycle policies and storage classes |
-| [@cdk-constructs/waf](packages/waf)                   | 0.1.0   | ^2.225.0    | >=24         | WAF WebACL constructs with geo-blocking and managed rules        |
+| Package                                               | Version | CDK Version | Node Version | Description                                                            |
+| ----------------------------------------------------- | ------- | ----------- | ------------ | ---------------------------------------------------------------------- |
+| [@cdk-constructs/aws](packages/aws)                   | 0.1.0   | ^2.225.0    | >=24         | AWS account, region, and environment enums                             |
+| [@cdk-constructs/aurora](packages/aurora)             | 0.1.0   | ^2.225.0    | >=24         | Aurora MySQL and PostgreSQL database constructs                        |
+| [@cdk-constructs/cloudfront](packages/cloudfront)     | 0.2.0   | ^2.225.0    | >=24         | CloudFront distribution with S3, security headers, and WAF integration |
+| [@cdk-constructs/codeartifact](packages/codeartifact) | 0.1.0   | ^2.225.0    | >=24         | CodeArtifact domain and repository constructs                          |
+| [@cdk-constructs/route53](packages/route53)           | 0.1.0   | ^2.225.0    | >=24         | Route53 DNS, hosted zones, resolvers, and ACM certificates             |
+| [@cdk-constructs/s3](packages/s3)                     | 0.1.0   | ^2.225.0    | >=24         | S3 bucket constructs with lifecycle policies and storage classes       |
+| [@cdk-constructs/waf](packages/waf)                   | 0.1.0   | ^2.225.0    | >=24         | WAF WebACL constructs with geo-blocking and managed rules              |
 
 ### Dependency Resolution
 
