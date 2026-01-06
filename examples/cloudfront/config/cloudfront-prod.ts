@@ -1,6 +1,6 @@
 import {Duration, RemovalPolicy} from 'aws-cdk-lib';
 import {PriceClass} from 'aws-cdk-lib/aws-cloudfront';
-import {CloudFrontS3Props, StorageClassStrategy} from '@cdk-constructs/cloudfront';
+import {CloudFrontS3Props, StorageClassStrategy, CachePreset, FrameOptions, ReferrerPolicy} from '@cdk-constructs/cloudfront';
 
 /**
  * Production environment configuration for CloudFront + S3.
@@ -12,8 +12,12 @@ import {CloudFrontS3Props, StorageClassStrategy} from '@cdk-constructs/cloudfron
  * - Global price class for best performance worldwide
  * - Retain removal policy to prevent accidental deletion
  * - Default error responses for SPA applications
+ * - Security headers for protection against common vulnerabilities
+ * - SPA-optimized cache policy
  *
  * Replace the domain and certificate values with your actual production values.
+ *
+ * For WAF integration, see cloudfront-waf-prod.ts example.
  */
 export const CLOUDFRONT_PROD_CONFIG: CloudFrontS3Props = {
     s3: {
@@ -35,6 +39,25 @@ export const CLOUDFRONT_PROD_CONFIG: CloudFrontS3Props = {
         defaultRootObject: 'index.html',
         comment: 'Production CloudFront distribution for CDK constructs example',
         priceClass: PriceClass.PRICE_CLASS_ALL,
+
+        // Security headers - recommended for all production deployments
+        responseHeadersPolicy: {
+            securityHeaders: {
+                strictTransportSecurity: {
+                    maxAge: Duration.days(365),
+                    includeSubdomains: true,
+                    preload: true,
+                },
+                contentTypeOptions: true,
+                frameOptions: FrameOptions.DENY,
+                xssProtection: true,
+                referrerPolicy: ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+            },
+        },
+
+        // SPA cache preset - optimized for Single Page Applications
+        cachePreset: CachePreset.SPA,
+
         // Uncomment to use a custom domain (requires ACM certificate in us-east-1)
         // domainNames: ['www.example.com', 'example.com'],
         // certificateArn: 'arn:aws:acm:us-east-1:123456789012:certificate/your-cert-id',

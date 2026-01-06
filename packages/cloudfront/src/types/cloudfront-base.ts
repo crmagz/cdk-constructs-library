@@ -1,5 +1,6 @@
 import {Duration} from 'aws-cdk-lib';
 import {DistributionProps} from 'aws-cdk-lib/aws-cloudfront';
+import {CachePreset, CloudFrontFunctionsConfig, CustomCachePolicyConfig, OriginShieldConfig, ResponseHeadersPolicyConfig} from './cloudfront-enhancements';
 
 /**
  * Error response configuration for CloudFront distributions.
@@ -50,6 +51,52 @@ export type CloudFrontProps = Omit<DistributionProps, 'defaultBehavior'> & {
 
     /** Optional custom error responses */
     errorResponses?: ErrorResponseProps[];
+
+    /**
+     * Response headers policy configuration for security and CORS headers.
+     *
+     * @remarks
+     * Automatically adds security headers to all responses to protect against
+     * common web vulnerabilities (XSS, clickjacking, MIME sniffing, etc.)
+     */
+    responseHeadersPolicy?: ResponseHeadersPolicyConfig;
+
+    /**
+     * Origin Shield configuration for improved cache hit ratio.
+     *
+     * @remarks
+     * Reduces origin load and improves performance by adding an additional
+     * caching layer between edge locations and your origin.
+     */
+    originShield?: OriginShieldConfig;
+
+    /**
+     * CloudFront Functions for request/response manipulation.
+     *
+     * @remarks
+     * Lightweight functions that run at edge locations for URL rewrites,
+     * header manipulation, and simple access control.
+     */
+    cloudfrontFunctions?: CloudFrontFunctionsConfig;
+
+    /**
+     * Cache optimization preset for common use cases.
+     *
+     * @remarks
+     * Pre-configured cache policies optimized for different content types.
+     * Use `CUSTOM` with `customCachePolicy` for fine-grained control.
+     *
+     * @defaultValue CachePreset.SPA
+     */
+    cachePreset?: CachePreset;
+
+    /**
+     * Custom cache policy configuration.
+     *
+     * @remarks
+     * Only used when `cachePreset` is set to `CUSTOM`.
+     */
+    customCachePolicy?: CustomCachePolicyConfig;
 };
 
 /**

@@ -1,6 +1,15 @@
 import {Duration, RemovalPolicy} from 'aws-cdk-lib';
 import {Certificate} from 'aws-cdk-lib/aws-certificatemanager';
-import {AccessLevel, AllowedMethods, Distribution, DistributionProps, PriceClass, ViewerProtocolPolicy} from 'aws-cdk-lib/aws-cloudfront';
+import {
+    AccessLevel,
+    AllowedMethods,
+    Distribution,
+    DistributionProps,
+    PriceClass,
+    ViewerProtocolPolicy,
+    FunctionEventType,
+    ResponseHeadersPolicy,
+} from 'aws-cdk-lib/aws-cloudfront';
 import {S3BucketOrigin} from 'aws-cdk-lib/aws-cloudfront-origins';
 import {ARecord, HostedZone, RecordTarget} from 'aws-cdk-lib/aws-route53';
 import {CloudFrontTarget} from 'aws-cdk-lib/aws-route53-targets';
@@ -8,6 +17,9 @@ import {Bucket, BucketAccessControl} from 'aws-cdk-lib/aws-s3';
 import {Construct} from 'constructs';
 import {createS3Bucket, StorageClassStrategy} from '@cdk-constructs/s3';
 import {CloudFrontS3Props, CloudFrontS3Resources} from '../types/cloudfront-s3';
+import {CachePreset} from '../types/cloudfront-enhancements';
+import {createResponseHeadersPolicy} from '../util/response-headers';
+import {createCachePolicy} from '../util/cache-policy';
 
 /**
  * Creates a standardized CloudFront distribution with an S3 bucket origin.
@@ -102,6 +114,37 @@ export const createCloudFrontS3 = (scope: Construct, props: CloudFrontS3Props): 
         });
     };
 
+    // Create response headers policy if configured
+    const responseHeadersPolicyCfn = props.cloudfront.responseHeadersPolicy
+        ? createResponseHeadersPolicy(scope, `${props.cloudfront.distributionName}-response-headers`, props.cloudfront.responseHeadersPolicy)
+        : undefined;
+
+    const responseHeadersPolicy = responseHeadersPolicyCfn
+        ? ResponseHeadersPolicy.fromResponseHeadersPolicyId(scope, `${props.cloudfront.distributionName}-rhp-ref`, responseHeadersPolicyCfn.attrId)
+        : undefined;
+
+    // Create cache policy based on preset or custom configuration
+    const cachePolicy = createCachePolicy(
+        scope,
+        `${props.cloudfront.distributionName}-cache`,
+        props.cloudfront.cachePreset ?? CachePreset.SPA,
+        props.cloudfront.customCachePolicy
+    );
+
+    // Configure origin with optional Origin Shield
+    const originConfig = props.cloudfront.originShield?.enabled
+        ? {
+              originAccessLevels: [AccessLevel.READ],
+              originShieldEnabled: true,
+              originShieldRegion: props.cloudfront.originShield.originShieldRegion,
+          }
+        : {
+              originAccessLevels: [AccessLevel.READ],
+          };
+
+    // Create S3 origin with Origin Shield if configured
+    const s3Origin = S3BucketOrigin.withOriginAccessControl(contentBucket, originConfig);
+
     const defaultErrorResponses = [
         {
             httpStatus: 404,
@@ -117,14 +160,30 @@ export const createCloudFrontS3 = (scope: Construct, props: CloudFrontS3Props): 
         },
     ];
 
+    // Build function associations for CloudFront Functions
+    const functionAssociations = [];
+    if (props.cloudfront.cloudfrontFunctions?.viewerRequest) {
+        functionAssociations.push({
+            function: props.cloudfront.cloudfrontFunctions.viewerRequest,
+            eventType: FunctionEventType.VIEWER_REQUEST,
+        });
+    }
+    if (props.cloudfront.cloudfrontFunctions?.viewerResponse) {
+        functionAssociations.push({
+            function: props.cloudfront.cloudfrontFunctions.viewerResponse,
+            eventType: FunctionEventType.VIEWER_RESPONSE,
+        });
+    }
+
     // Construct distributionProps, conditionally including domainNames and certificate
     const distributionProps: DistributionProps = {
         defaultBehavior: {
-            origin: S3BucketOrigin.withOriginAccessControl(contentBucket, {
-                originAccessLevels: [AccessLevel.READ],
-            }),
+            origin: s3Origin,
             viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
+            cachePolicy,
+            responseHeadersPolicy,
+            functionAssociations: functionAssociations.length > 0 ? functionAssociations : undefined,
         },
         logBucket,
         defaultRootObject: props.cloudfront.defaultRootObject,
