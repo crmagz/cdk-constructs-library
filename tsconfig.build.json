@@ -9,6 +9,7 @@
         {"path": "./packages/route53"},
         {"path": "./packages/waf"},
         {"path": "./packages/lambda"},
-        {"path": "./packages/apigateway"}
+        {"path": "./packages/apigateway"},
+        {"path": "./packages/cloudwatch"}
     ]
 }

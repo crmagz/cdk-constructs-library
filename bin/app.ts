@@ -13,6 +13,7 @@ import {Route53DevStack} from '../examples/route53/stacks/route53-dev-stack';
 import {Route53ProdStack} from '../examples/route53/stacks/route53-prod-stack';
 import {LambdaDevStack} from '../examples/lambda/stacks/lambda-dev-stack';
 import {ApiDevStack} from '../examples/apigateway/stacks/api-dev-stack';
+import {CloudWatchDevStack, CloudWatchPagerDutyDevStack, PagerDutyLambdaDevStack} from '../examples/cloudwatch/stacks/cloudwatch-dev-stack';
 import {integrationEnvironments} from './environment';
 
 const app = new App();
@@ -141,6 +142,28 @@ integrationEnvironments.forEach(env => {
         // Choose stack based on environment
         if (env.name === 'dev' || env.name === 'staging') {
             new ApiDevStack(app, `apigateway-${env.name}`, envProps);
+        }
+    }
+
+    // Create CloudWatch stacks if configured
+    if (env.cloudwatch) {
+        const envProps = {
+            env: {
+                account: env.account,
+                region: env.region,
+            },
+        };
+
+        // Choose stack based on environment
+        if (env.name === 'dev' || env.name === 'staging') {
+            // Main CloudWatch stack with SNS topics and alarms
+            new CloudWatchDevStack(app, `cloudwatch-${env.name}`, envProps);
+
+            // PagerDuty Lambda stack (optional, deploy first if using PagerDuty)
+            new PagerDutyLambdaDevStack(app, `pagerduty-lambda-${env.name}`, envProps);
+
+            // CloudWatch with PagerDuty integration (requires PagerDuty Lambda ARN)
+            new CloudWatchPagerDutyDevStack(app, `cloudwatch-pagerduty-${env.name}`, envProps);
         }
     }
 });

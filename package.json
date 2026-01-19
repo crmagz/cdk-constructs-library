@@ -58,6 +58,7 @@
         "@cdk-constructs/aurora": "*",
         "@cdk-constructs/aws": "*",
         "@cdk-constructs/cloudfront": "*",
+        "@cdk-constructs/cloudwatch": "*",
         "@cdk-constructs/codeartifact": "*",
         "@cdk-constructs/lambda": "*",
         "@cdk-constructs/route53": "*",

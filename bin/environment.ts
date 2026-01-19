@@ -52,6 +52,8 @@ export const integrationEnvironments: ProjectEnvironment[] = [
         lambda: {},
         // API Gateway dev configuration (flag to enable the stack)
         apigateway: {},
+        // CloudWatch dev configuration (flag to enable the stack)
+        cloudwatch: {},
     },
     {
         ...stagingEnv,

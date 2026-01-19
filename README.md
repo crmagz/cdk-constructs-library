@@ -33,6 +33,7 @@ This monorepo contains the following packages:
 | [@cdk-constructs/aws](packages/aws)                   | 0.1.0   | ^2.225.0    | >=24         | AWS account, region, and environment enums                             |
 | [@cdk-constructs/aurora](packages/aurora)             | 0.1.0   | ^2.225.0    | >=24         | Aurora MySQL and PostgreSQL database constructs                        |
 | [@cdk-constructs/cloudfront](packages/cloudfront)     | 0.2.0   | ^2.225.0    | >=24         | CloudFront distribution with S3, security headers, and WAF integration |
+| [@cdk-constructs/cloudwatch](packages/cloudwatch)     | 0.1.0   | ^2.225.0    | >=24         | CloudWatch alarms, SNS topics, and PagerDuty integration               |
 | [@cdk-constructs/codeartifact](packages/codeartifact) | 0.1.0   | ^2.225.0    | >=24         | CodeArtifact domain and repository constructs                          |
 | [@cdk-constructs/lambda](packages/lambda)             | 0.1.0   | ^2.225.0    | >=24         | Lambda function constructs for Node.js and Python with VPC support     |
 | [@cdk-constructs/route53](packages/route53)           | 0.1.0   | ^2.225.0    | >=24         | Route53 DNS, hosted zones, resolvers, and ACM certificates             |
@@ -47,6 +48,7 @@ This monorepo contains the following packages:
 ├── @cdk-constructs/aws
 ├── @cdk-constructs/aurora
 ├── @cdk-constructs/cloudfront (depends on: s3@*)
+├── @cdk-constructs/cloudwatch (depends on: lambda@*)
 ├── @cdk-constructs/codeartifact (depends on: aws@*)
 ├── @cdk-constructs/lambda
 ├── @cdk-constructs/route53
@@ -82,6 +84,7 @@ npm install @cdk-constructs/apigateway --save-exact  # REST API Gateway (depends
 npm install @cdk-constructs/aws --save-exact
 npm install @cdk-constructs/aurora --save-exact
 npm install @cdk-constructs/cloudfront --save-exact
+npm install @cdk-constructs/cloudwatch --save-exact  # CloudWatch alarms with PagerDuty (depends on lambda)
 npm install @cdk-constructs/codeartifact --save-exact
 npm install @cdk-constructs/lambda --save-exact       # Lambda functions (Node.js & Python)
 npm install @cdk-constructs/route53 --save-exact
@@ -130,6 +133,7 @@ make build-workspace PACKAGE=apigateway    # Build @cdk-constructs/apigateway
 make build-workspace PACKAGE=aws           # Build @cdk-constructs/aws
 make build-workspace PACKAGE=aurora        # Build @cdk-constructs/aurora
 make build-workspace PACKAGE=cloudfront    # Build @cdk-constructs/cloudfront
+make build-workspace PACKAGE=cloudwatch    # Build @cdk-constructs/cloudwatch
 make build-workspace PACKAGE=codeartifact  # Build @cdk-constructs/codeartifact
 make build-workspace PACKAGE=lambda        # Build @cdk-constructs/lambda
 make build-workspace PACKAGE=route53       # Build @cdk-constructs/route53
@@ -141,6 +145,7 @@ make build-apigateway     # Build @cdk-constructs/apigateway (builds lambda firs
 make build-aws            # Build @cdk-constructs/aws
 make build-aurora         # Build @cdk-constructs/aurora
 make build-cloudfront     # Build @cdk-constructs/cloudfront
+make build-cloudwatch     # Build @cdk-constructs/cloudwatch (builds lambda first)
 make build-codeartifact   # Build @cdk-constructs/codeartifact
 make build-lambda         # Build @cdk-constructs/lambda
 make build-route53        # Build @cdk-constructs/route53
@@ -192,6 +197,7 @@ make publish-apigateway   # Publish @cdk-constructs/apigateway
 make publish-aws          # Publish @cdk-constructs/aws
 make publish-aurora       # Publish @cdk-constructs/aurora
 make publish-cloudfront   # Publish @cdk-constructs/cloudfront
+make publish-cloudwatch   # Publish @cdk-constructs/cloudwatch
 make publish-codeartifact # Publish @cdk-constructs/codeartifact
 make publish-lambda       # Publish @cdk-constructs/lambda
 make publish-route53      # Publish @cdk-constructs/route53
@@ -203,6 +209,7 @@ make publish-workspace PACKAGE=apigateway
 make publish-workspace PACKAGE=aws
 make publish-workspace PACKAGE=aurora
 make publish-workspace PACKAGE=cloudfront
+make publish-workspace PACKAGE=cloudwatch
 make publish-workspace PACKAGE=lambda
 make publish-workspace PACKAGE=route53
 make publish-workspace PACKAGE=s3
@@ -266,6 +273,7 @@ cdk-constructs-library/
 │   ├── aws/                 # AWS account, region, and environment enums
 │   ├── aurora/              # Aurora MySQL and PostgreSQL database constructs
 │   ├── cloudfront/          # CloudFront distribution with S3 origin constructs
+│   ├── cloudwatch/          # CloudWatch alarms, SNS topics, and PagerDuty integration
 │   ├── codeartifact/        # CodeArtifact domain and repository constructs
 │   ├── lambda/              # Lambda function constructs (Node.js & Python)
 │   ├── route53/             # Route53 DNS, hosted zones, resolvers, and ACM certificates

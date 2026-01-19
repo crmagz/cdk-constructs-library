@@ -6,6 +6,7 @@ import {CloudFrontS3Props} from '@cdk-constructs/cloudfront';
 import {PublicHostedZoneProps, PrivateHostedZoneProps} from '@cdk-constructs/route53';
 import {NodejsFunctionProps, PythonFunctionProps} from '@cdk-constructs/lambda';
 import {RegionalRestApiProps, PrivateRestApiProps} from '@cdk-constructs/apigateway';
+import {CloudWatchAlarmsProps, SnsTopicsProps, PagerDutyLambdaProps} from '@cdk-constructs/cloudwatch';
 
 /**
  * Project environment configuration that includes all stack props.
@@ -112,5 +113,31 @@ export type ProjectEnvironment = EnvironmentConfig & {
          * Private REST API configuration.
          */
         privateApi?: Partial<PrivateRestApiProps>;
+    };
+
+    /**
+     * Optional CloudWatch configuration.
+     * If provided, CloudWatch stacks will be created for this environment.
+     */
+    cloudwatch?: {
+        /**
+         * CloudWatch alarms configuration (SNS only).
+         */
+        alarms?: Partial<CloudWatchAlarmsProps>;
+
+        /**
+         * CloudWatch alarms with PagerDuty integration.
+         */
+        alarmsWithPagerDuty?: Partial<CloudWatchAlarmsProps>;
+
+        /**
+         * SNS topics configuration.
+         */
+        snsTopics?: Partial<SnsTopicsProps>;
+
+        /**
+         * PagerDuty Lambda configuration.
+         */
+        pagerDutyLambda?: Partial<PagerDutyLambdaProps>;
     };
 };
