@@ -29,10 +29,12 @@ This monorepo contains the following packages:
 
 | Package                                               | Version | CDK Version | Node Version | Description                                                            |
 | ----------------------------------------------------- | ------- | ----------- | ------------ | ---------------------------------------------------------------------- |
+| [@cdk-constructs/apigateway](packages/apigateway)     | 0.1.0   | ^2.225.0    | >=24         | REST API Gateway with Lambda integration (Private and Regional)        |
 | [@cdk-constructs/aws](packages/aws)                   | 0.1.0   | ^2.225.0    | >=24         | AWS account, region, and environment enums                             |
 | [@cdk-constructs/aurora](packages/aurora)             | 0.1.0   | ^2.225.0    | >=24         | Aurora MySQL and PostgreSQL database constructs                        |
 | [@cdk-constructs/cloudfront](packages/cloudfront)     | 0.2.0   | ^2.225.0    | >=24         | CloudFront distribution with S3, security headers, and WAF integration |
 | [@cdk-constructs/codeartifact](packages/codeartifact) | 0.1.0   | ^2.225.0    | >=24         | CodeArtifact domain and repository constructs                          |
+| [@cdk-constructs/lambda](packages/lambda)             | 0.1.0   | ^2.225.0    | >=24         | Lambda function constructs for Node.js and Python with VPC support     |
 | [@cdk-constructs/route53](packages/route53)           | 0.1.0   | ^2.225.0    | >=24         | Route53 DNS, hosted zones, resolvers, and ACM certificates             |
 | [@cdk-constructs/s3](packages/s3)                     | 0.1.0   | ^2.225.0    | >=24         | S3 bucket constructs with lifecycle policies and storage classes       |
 | [@cdk-constructs/waf](packages/waf)                   | 0.1.0   | ^2.225.0    | >=24         | WAF WebACL constructs with geo-blocking and managed rules              |
@@ -41,10 +43,12 @@ This monorepo contains the following packages:
 
 ```
 @cdk-constructs/cdk (root)
+├── @cdk-constructs/apigateway (depends on: lambda@*)
 ├── @cdk-constructs/aws
 ├── @cdk-constructs/aurora
 ├── @cdk-constructs/cloudfront (depends on: s3@*)
 ├── @cdk-constructs/codeartifact (depends on: aws@*)
+├── @cdk-constructs/lambda
 ├── @cdk-constructs/route53
 ├── @cdk-constructs/s3
 └── @cdk-constructs/waf
@@ -74,10 +78,12 @@ The following constructs remain in the root package and will be migrated to subp
 npm install @cdk-constructs/cdk --save-exact
 
 # Install subpackages as needed
+npm install @cdk-constructs/apigateway --save-exact  # REST API Gateway (depends on lambda)
 npm install @cdk-constructs/aws --save-exact
 npm install @cdk-constructs/aurora --save-exact
 npm install @cdk-constructs/cloudfront --save-exact
 npm install @cdk-constructs/codeartifact --save-exact
+npm install @cdk-constructs/lambda --save-exact       # Lambda functions (Node.js & Python)
 npm install @cdk-constructs/route53 --save-exact
 npm install @cdk-constructs/s3 --save-exact
 npm install @cdk-constructs/waf --save-exact
@@ -120,19 +126,23 @@ make build-all            # Build everything (workspaces + app)
 make clean                # Remove all build artifacts
 
 # Build specific workspace
+make build-workspace PACKAGE=apigateway    # Build @cdk-constructs/apigateway
 make build-workspace PACKAGE=aws           # Build @cdk-constructs/aws
 make build-workspace PACKAGE=aurora        # Build @cdk-constructs/aurora
 make build-workspace PACKAGE=cloudfront    # Build @cdk-constructs/cloudfront
 make build-workspace PACKAGE=codeartifact  # Build @cdk-constructs/codeartifact
+make build-workspace PACKAGE=lambda        # Build @cdk-constructs/lambda
 make build-workspace PACKAGE=route53       # Build @cdk-constructs/route53
 make build-workspace PACKAGE=s3            # Build @cdk-constructs/s3
 make build-workspace PACKAGE=waf           # Build @cdk-constructs/waf
 
 # Or use individual targets
+make build-apigateway     # Build @cdk-constructs/apigateway (builds lambda first)
 make build-aws            # Build @cdk-constructs/aws
 make build-aurora         # Build @cdk-constructs/aurora
 make build-cloudfront     # Build @cdk-constructs/cloudfront
 make build-codeartifact   # Build @cdk-constructs/codeartifact
+make build-lambda         # Build @cdk-constructs/lambda
 make build-route53        # Build @cdk-constructs/route53
 make build-s3             # Build @cdk-constructs/s3
 make build-waf            # Build @cdk-constructs/waf
@@ -178,18 +188,22 @@ make ci-deploy            # CI deploy - checks + build + synth
 make publish              # Format check + lint + test + build + publish
 
 # Publish individual packages
+make publish-apigateway   # Publish @cdk-constructs/apigateway
 make publish-aws          # Publish @cdk-constructs/aws
 make publish-aurora       # Publish @cdk-constructs/aurora
 make publish-cloudfront   # Publish @cdk-constructs/cloudfront
 make publish-codeartifact # Publish @cdk-constructs/codeartifact
+make publish-lambda       # Publish @cdk-constructs/lambda
 make publish-route53      # Publish @cdk-constructs/route53
 make publish-s3           # Publish @cdk-constructs/s3
 make publish-waf          # Publish @cdk-constructs/waf
 
 # Or publish specific workspace
+make publish-workspace PACKAGE=apigateway
 make publish-workspace PACKAGE=aws
 make publish-workspace PACKAGE=aurora
 make publish-workspace PACKAGE=cloudfront
+make publish-workspace PACKAGE=lambda
 make publish-workspace PACKAGE=route53
 make publish-workspace PACKAGE=s3
 make publish-workspace PACKAGE=waf
@@ -248,16 +262,20 @@ cdk-constructs-library/
 ├── package.json              # Root package with workspace configuration
 ├── Makefile                  # Build automation and common tasks
 ├── packages/
+│   ├── apigateway/          # REST API Gateway with Lambda integration
 │   ├── aws/                 # AWS account, region, and environment enums
 │   ├── aurora/              # Aurora MySQL and PostgreSQL database constructs
 │   ├── cloudfront/          # CloudFront distribution with S3 origin constructs
 │   ├── codeartifact/        # CodeArtifact domain and repository constructs
+│   ├── lambda/              # Lambda function constructs (Node.js & Python)
 │   ├── route53/             # Route53 DNS, hosted zones, resolvers, and ACM certificates
 │   ├── s3/                  # S3 bucket constructs with lifecycle policies
 │   └── waf/                 # WAF WebACL constructs with geo-blocking and managed rules
 ├── examples/
+│   ├── apigateway/          # API Gateway example stacks and configurations
 │   ├── aurora/              # Aurora example stacks and configurations
 │   ├── cloudfront/          # CloudFront example stacks and configurations
+│   ├── lambda/              # Lambda example stacks and configurations
 │   ├── route53/             # Route53 example stacks and configurations
 │   ├── s3/                  # S3 example stacks and configurations
 │   └── waf/                 # WAF example stacks and configurations
