@@ -48,6 +48,10 @@ export const integrationEnvironments: ProjectEnvironment[] = [
         cloudfront: {},
         // Route53 DNS dev configuration (flag to enable the stack)
         route53: {},
+        // Lambda function dev configuration (flag to enable the stack)
+        lambda: {},
+        // API Gateway dev configuration (flag to enable the stack)
+        apigateway: {},
     },
     {
         ...stagingEnv,

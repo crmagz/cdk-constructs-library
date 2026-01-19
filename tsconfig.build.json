@@ -7,6 +7,8 @@
         {"path": "./packages/codeartifact"},
         {"path": "./packages/cloudfront"},
         {"path": "./packages/route53"},
-        {"path": "./packages/waf"}
+        {"path": "./packages/waf"},
+        {"path": "./packages/lambda"},
+        {"path": "./packages/apigateway"}
     ]
 }

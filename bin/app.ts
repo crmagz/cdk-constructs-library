@@ -11,6 +11,8 @@ import {CloudFrontDevStack} from '../examples/cloudfront/stacks/cloudfront-dev-s
 import {CloudFrontProdStack} from '../examples/cloudfront/stacks/cloudfront-prod-stack';
 import {Route53DevStack} from '../examples/route53/stacks/route53-dev-stack';
 import {Route53ProdStack} from '../examples/route53/stacks/route53-prod-stack';
+import {LambdaDevStack} from '../examples/lambda/stacks/lambda-dev-stack';
+import {ApiDevStack} from '../examples/apigateway/stacks/api-dev-stack';
 import {integrationEnvironments} from './environment';
 
 const app = new App();
@@ -109,6 +111,36 @@ integrationEnvironments.forEach(env => {
             new Route53DevStack(app, `route53-${env.name}`, envProps);
         } else if (env.name === 'prod') {
             new Route53ProdStack(app, `route53-${env.name}`, envProps);
+        }
+    }
+
+    // Create Lambda stack if configured
+    if (env.lambda) {
+        const envProps = {
+            env: {
+                account: env.account,
+                region: env.region,
+            },
+        };
+
+        // Choose stack based on environment
+        if (env.name === 'dev' || env.name === 'staging') {
+            new LambdaDevStack(app, `lambda-${env.name}`, envProps);
+        }
+    }
+
+    // Create API Gateway stack if configured
+    if (env.apigateway) {
+        const envProps = {
+            env: {
+                account: env.account,
+                region: env.region,
+            },
+        };
+
+        // Choose stack based on environment
+        if (env.name === 'dev' || env.name === 'staging') {
+            new ApiDevStack(app, `apigateway-${env.name}`, envProps);
         }
     }
 });

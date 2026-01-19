@@ -54,10 +54,12 @@
         "typescript": "~5.4.3"
     },
     "dependencies": {
+        "@cdk-constructs/apigateway": "*",
         "@cdk-constructs/aurora": "*",
         "@cdk-constructs/aws": "*",
         "@cdk-constructs/cloudfront": "*",
         "@cdk-constructs/codeartifact": "*",
+        "@cdk-constructs/lambda": "*",
         "@cdk-constructs/route53": "*",
         "@cdk-constructs/s3": "*",
         "@cdk-constructs/waf": "*",

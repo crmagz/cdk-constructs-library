@@ -1,4 +1,4 @@
-.PHONY: help install clean lint lint-fix format format-check format-fix build build-app build-all build-workspace build-aws build-aurora build-cloudfront build-codeartifact build-route53 build-s3 build-waf test synth diff deploy check ci-build ci-check codeartifact-login publish-workspace publish-aws publish-aurora publish-cloudfront publish-codeartifact publish-route53 publish-s3 publish-waf publish-all-packages pre-publish publish
+.PHONY: help install clean lint lint-fix format format-check format-fix build build-app build-all build-workspace build-apigateway build-aws build-aurora build-cloudfront build-codeartifact build-lambda build-route53 build-s3 build-waf test synth diff deploy check ci-build ci-check codeartifact-login publish-workspace publish-apigateway publish-aws publish-aurora publish-cloudfront publish-codeartifact publish-lambda publish-route53 publish-s3 publish-waf publish-all-packages pre-publish publish
 
 # Default target - show help
 .DEFAULT_GOAL := help
@@ -87,12 +87,17 @@ build-workspace: ## Build specific workspace (usage: make build-workspace PACKAG
 	@if [ -z "$(PACKAGE)" ]; then \
 		echo "$(RED)✗ Error: PACKAGE variable not set$(NC)"; \
 		echo "$(YELLOW)Usage: make build-workspace PACKAGE=aws$(NC)"; \
-		echo "$(YELLOW)Available packages: aws, aurora, cloudfront, codeartifact, route53, s3, waf$(NC)"; \
+		echo "$(YELLOW)Available packages: apigateway, aws, aurora, cloudfront, codeartifact, lambda, route53, s3, waf$(NC)"; \
 		exit 1; \
 	fi
 	@echo "$(CYAN)Building @cdk-constructs/$(PACKAGE)...$(NC)"
 	npm run build --workspace=@cdk-constructs/$(PACKAGE)
 	@echo "$(GREEN)✓ @cdk-constructs/$(PACKAGE) built$(NC)"
+
+build-apigateway: build-lambda ## Build @cdk-constructs/apigateway package
+	@echo "$(CYAN)Building @cdk-constructs/apigateway...$(NC)"
+	npm run build --workspace=@cdk-constructs/apigateway
+	@echo "$(GREEN)✓ @cdk-constructs/apigateway built$(NC)"
 
 build-aws: ## Build @cdk-constructs/aws package
 	@echo "$(CYAN)Building @cdk-constructs/aws...$(NC)"
@@ -113,6 +118,11 @@ build-codeartifact: ## Build @cdk-constructs/codeartifact package
 	@echo "$(CYAN)Building @cdk-constructs/codeartifact...$(NC)"
 	npm run build --workspace=@cdk-constructs/codeartifact
 	@echo "$(GREEN)✓ @cdk-constructs/codeartifact built$(NC)"
+
+build-lambda: ## Build @cdk-constructs/lambda package
+	@echo "$(CYAN)Building @cdk-constructs/lambda...$(NC)"
+	npm run build --workspace=@cdk-constructs/lambda
+	@echo "$(GREEN)✓ @cdk-constructs/lambda built$(NC)"
 
 build-route53: ## Build @cdk-constructs/route53 package
 	@echo "$(CYAN)Building @cdk-constructs/route53...$(NC)"
@@ -224,12 +234,17 @@ publish-workspace: codeartifact-login ## Publish specific workspace (usage: make
 	@if [ -z "$(PACKAGE)" ]; then \
 		echo "$(RED)✗ Error: PACKAGE variable not set$(NC)"; \
 		echo "$(YELLOW)Usage: make publish-workspace PACKAGE=aws$(NC)"; \
-		echo "$(YELLOW)Available packages: aws, aurora, cloudfront, codeartifact, route53, s3, waf$(NC)"; \
+		echo "$(YELLOW)Available packages: apigateway, aws, aurora, cloudfront, codeartifact, lambda, route53, s3, waf$(NC)"; \
 		exit 1; \
 	fi
 	@echo "$(CYAN)Publishing @cdk-constructs/$(PACKAGE)...$(NC)"
 	@cd packages/$(PACKAGE) && npm publish
 	@echo "$(GREEN)✓ @cdk-constructs/$(PACKAGE) published$(NC)"
+
+publish-apigateway: codeartifact-login ## Publish @cdk-constructs/apigateway package
+	@echo "$(CYAN)Publishing @cdk-constructs/apigateway...$(NC)"
+	@cd packages/apigateway && npm publish
+	@echo "$(GREEN)✓ @cdk-constructs/apigateway published$(NC)"
 
 publish-aws: codeartifact-login ## Publish @cdk-constructs/aws package
 	@echo "$(CYAN)Publishing @cdk-constructs/aws...$(NC)"
@@ -251,6 +266,11 @@ publish-codeartifact: codeartifact-login ## Publish @cdk-constructs/codeartifact
 	@cd packages/codeartifact && npm publish
 	@echo "$(GREEN)✓ @cdk-constructs/codeartifact published$(NC)"
 
+publish-lambda: codeartifact-login ## Publish @cdk-constructs/lambda package
+	@echo "$(CYAN)Publishing @cdk-constructs/lambda...$(NC)"
+	@cd packages/lambda && npm publish
+	@echo "$(GREEN)✓ @cdk-constructs/lambda published$(NC)"
+
 publish-route53: codeartifact-login ## Publish @cdk-constructs/route53 package
 	@echo "$(CYAN)Publishing @cdk-constructs/route53...$(NC)"
 	@cd packages/route53 && npm publish
@@ -266,7 +286,7 @@ publish-waf: codeartifact-login ## Publish @cdk-constructs/waf package
 	@cd packages/waf && npm publish
 	@echo "$(GREEN)✓ @cdk-constructs/waf published$(NC)"
 
-publish-all-packages: publish-aws publish-aurora publish-cloudfront publish-codeartifact publish-route53 publish-s3 publish-waf ## Publish all workspace packages
+publish-all-packages: publish-apigateway publish-aws publish-aurora publish-cloudfront publish-codeartifact publish-lambda publish-route53 publish-s3 publish-waf ## Publish all workspace packages
 	@echo "$(GREEN)✓ All packages published$(NC)"
 
 pre-publish: ## Run all pre-publish validation steps
@@ -282,10 +302,12 @@ publish: pre-publish publish-all-packages ## Run validation and publish all pack
 	@echo "$(GREEN)✓ Publishing complete$(NC)"
 	@echo ""
 	@echo "$(CYAN)Published packages:$(NC)"
+	@echo "  • @cdk-constructs/apigateway"
 	@echo "  • @cdk-constructs/aws"
 	@echo "  • @cdk-constructs/aurora"
 	@echo "  • @cdk-constructs/cloudfront"
 	@echo "  • @cdk-constructs/codeartifact"
+	@echo "  • @cdk-constructs/lambda"
 	@echo "  • @cdk-constructs/route53"
 	@echo "  • @cdk-constructs/s3"
 	@echo "  • @cdk-constructs/waf"

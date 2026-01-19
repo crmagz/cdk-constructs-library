@@ -4,6 +4,8 @@ import {AuroraMySqlClusterProps, AuroraPostgresClusterProps} from '@cdk-construc
 import {BucketProps} from '@cdk-constructs/s3';
 import {CloudFrontS3Props} from '@cdk-constructs/cloudfront';
 import {PublicHostedZoneProps, PrivateHostedZoneProps} from '@cdk-constructs/route53';
+import {NodejsFunctionProps, PythonFunctionProps} from '@cdk-constructs/lambda';
+import {RegionalRestApiProps, PrivateRestApiProps} from '@cdk-constructs/apigateway';
 
 /**
  * Project environment configuration that includes all stack props.
@@ -78,5 +80,37 @@ export type ProjectEnvironment = EnvironmentConfig & {
          * Private hosted zone configuration.
          */
         privateZone?: Partial<PrivateHostedZoneProps>;
+    };
+
+    /**
+     * Optional Lambda function configuration.
+     * If provided, a Lambda stack will be created for this environment.
+     */
+    lambda?: {
+        /**
+         * Node.js function configuration.
+         */
+        nodejsFunction?: Partial<NodejsFunctionProps>;
+
+        /**
+         * Python function configuration.
+         */
+        pythonFunction?: Partial<PythonFunctionProps>;
+    };
+
+    /**
+     * Optional API Gateway configuration.
+     * If provided, an API Gateway stack will be created for this environment.
+     */
+    apigateway?: {
+        /**
+         * Regional REST API configuration.
+         */
+        regionalApi?: Partial<RegionalRestApiProps>;
+
+        /**
+         * Private REST API configuration.
+         */
+        privateApi?: Partial<PrivateRestApiProps>;
     };
 };
